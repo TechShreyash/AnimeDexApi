@@ -26,5 +26,5 @@ wrangler login
 ```bash
 wrangler publish
 ```
-
+https://deploy.workers.cloudflare.com/?url=https://github.com/TechShreyash/AnimeDexApi
 

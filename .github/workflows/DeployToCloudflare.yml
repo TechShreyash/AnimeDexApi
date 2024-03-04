@@ -14,8 +14,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
-      - name: Install dependencies
+      - name: Install cheerio
         run: npm install --save npm install cheerio
+      - name: Install crypto-js
         run: npm install --save npm install crypto-js
       - name: Publish
         uses: cloudflare/wrangler-action@1.2.0

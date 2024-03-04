@@ -1,0 +1,25 @@
+name: Deploy To Cloudflare
+
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Navigate to repo
+        run: cd $GITHUB_WORKSPACE
+      - name: Install dependencies
+        run: npm install --save npm install cheerio
+        run: npm install --save npm install crypto-js
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.2.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}

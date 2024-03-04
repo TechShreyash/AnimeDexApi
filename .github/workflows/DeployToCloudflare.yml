@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - name: Navigate to repo
         run: cd $GITHUB_WORKSPACE
       - name: Install Dependencies
@@ -20,9 +20,8 @@ jobs:
         run: npm install --save npm install cheerio
       - name: Install crypto-js
         run: npm install --save npm install crypto-js
-      - name: Publish
-        uses: cloudflare/wrangler-action@1.2.0
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}

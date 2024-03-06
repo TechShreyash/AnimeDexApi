@@ -32,7 +32,7 @@ wrangler login
 - Deploy To Workers
 
 ```bash
-wrangler publish
+wrangler deploy
 ```
 
 ## Updating Api

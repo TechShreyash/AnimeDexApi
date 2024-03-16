@@ -15,6 +15,7 @@ import {
     getAnilistUpcoming,
 } from "./anilist";
 import { SaveError } from "./errorHandler";
+import { increaseViews } from "./statsHandler";
 
 let CACHE = {};
 let HOME_CACHE = {};
@@ -28,28 +29,27 @@ let AT_CACHE = {};
 // For Fixing CORS issue
 // CORS Fix Start
 
-
 const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-}
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+};
 
 function handleOptions(request) {
     if (
-        request.headers.get('Origin') !== null &&
-        request.headers.get('Access-Control-Request-Method') !== null &&
-        request.headers.get('Access-Control-Request-Headers') !== null
+        request.headers.get("Origin") !== null &&
+        request.headers.get("Access-Control-Request-Method") !== null &&
+        request.headers.get("Access-Control-Request-Headers") !== null
     ) {
         return new Response(null, {
             headers: corsHeaders,
-        })
+        });
     } else {
         return new Response(null, {
             headers: {
-                Allow: 'GET, HEAD, POST, OPTIONS',
+                Allow: "GET, HEAD, POST, OPTIONS",
             },
-        })
+        });
     }
 }
 
@@ -57,18 +57,24 @@ function handleOptions(request) {
 
 export default {
     async fetch(request, env, ctx) {
-        if (request.method === 'OPTIONS') {
+        if (request.method === "OPTIONS") {
             // Handle CORS preflight requests
-            return handleOptions(request)
-        }
-        else if (
-            request.method === 'GET' ||
-            request.method === 'HEAD' ||
-            request.method === 'POST'
+            return handleOptions(request);
+        } else if (
+            request.method === "GET" ||
+            request.method === "HEAD" ||
+            request.method === "POST"
         ) {
             const url = request.url;
 
             if (url.includes("/search/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 let query, page;
                 try {
                     if (url.includes("?page=")) {
@@ -111,6 +117,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/home")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 if (HOME_CACHE["data"] != null) {
                     const t1 = Math.floor(Date.now() / 1000);
                     const t2 = HOME_CACHE["time"];
@@ -150,6 +163,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/anime/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 let anime = url.split("/anime/")[1];
 
                 if (ANIME_CACHE[anime] != null) {
@@ -157,7 +177,7 @@ export default {
                     const t2 = ANIME_CACHE[`time_${anime}`];
                     if (t1 - t2 < 60 * 60) {
                         const data = ANIME_CACHE[anime];
-                        data['from_cache'] = true
+                        data["from_cache"] = true;
                         const json = JSON.stringify({
                             results: data,
                         });
@@ -202,6 +222,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/episode/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 const id = url.split("/episode/")[1];
                 const data = await getEpisode(id);
                 const json = JSON.stringify({ results: data });
@@ -210,6 +237,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/download/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 const query = url.split("/download/")[1];
                 const timeValue = CACHE["timeValue"];
                 const cookieValue = CACHE["cookieValue"];
@@ -240,6 +274,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/recent/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 const page = url.split("/recent/")[1];
 
                 if (RECENT_CACHE[page] != null) {
@@ -269,6 +310,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/recommendations/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 let query = url.split("/recommendations/")[1];
 
                 if (REC_CACHE[query]) {
@@ -278,7 +326,6 @@ export default {
                     return new Response(json, {
                         headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                     });
-
                 }
 
                 const search = await getAnilistSearch(query);
@@ -297,6 +344,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/gogoPopular/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 let page = url.split("/gogoPopular/")[1];
 
                 if (GP_CACHE[page] != null) {
@@ -321,6 +375,13 @@ export default {
                     headers: { "Access-Control-Allow-Origin": "*", Vary: "Origin" },
                 });
             } else if (url.includes("/upcoming/")) {
+                const headers = request.headers;
+                let referer = headers.get("Referer");
+                if (referer === null) {
+                    referer = headers.get("referer");
+                }
+                await increaseViews(referer);
+
                 let page = url.split("/upcoming/")[1];
 
                 if (AT_CACHE[page] != null) {
@@ -357,13 +418,11 @@ export default {
                     Vary: "Origin",
                 },
             });
-        }
-        else {
+        } else {
             return new Response(null, {
                 status: 405,
-                statusText: 'Method Not Allowed',
-            })
-
+                statusText: "Method Not Allowed",
+            });
         }
     },
 };

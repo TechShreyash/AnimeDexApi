@@ -11,8 +11,6 @@
     },
     "dependencies": {
         "cheerio": "^1.0.0-rc.12",
-        "crypto-js": "^4.2.0",
-        "install": "^0.13.0",
-        "npm": "^10.2.1"
+        "crypto-js": "^4.2.0"
     }
 }

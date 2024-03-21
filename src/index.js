@@ -164,10 +164,14 @@ export default {
                 });
             } else if (url.includes("/anime/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
+                let referer = String(headers.get("Referer"));
+                if (referer == 'null') {
+                    referer = String(headers.get("referer"));
                 }
+                if (referer == 'null') {
+                    referer = 'direct'
+                }
+
                 await increaseViews(referer);
 
                 let anime = url.split("/anime/")[1];

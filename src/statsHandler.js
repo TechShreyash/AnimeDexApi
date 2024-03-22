@@ -13,13 +13,14 @@ async function increaseViews(headers) {
         else {
             try {
                 const url = new URL(referer);
-                referer = url.hostname
+                referer = url.origin
             }
             catch (e) {
                 console.log(e)
             }
         }
-        website = referer
+        const website = referer
+        console.log(website)
 
         if (CACHE[website]) {
             CACHE[website] += 1

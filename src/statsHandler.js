@@ -1,8 +1,26 @@
 const CACHE = {}
 
 
-async function increaseViews(website) {
+async function increaseViews(headers) {
     try {
+        let referer = String(headers.get("Referer"));
+        if (referer == 'null') {
+            referer = String(headers.get("referer"));
+        }
+        if (referer == 'null') {
+            referer = "direct";
+        }
+        else {
+            try {
+                const url = new URL(referer);
+                referer = url.hostname
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }
+        website = referer
+
         if (CACHE[website]) {
             CACHE[website] += 1
         } else {

@@ -69,11 +69,7 @@ export default {
 
             if (url.includes("/search/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 let query, page;
                 try {
@@ -118,11 +114,7 @@ export default {
                 });
             } else if (url.includes("/home")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 if (HOME_CACHE["data"] != null) {
                     const t1 = Math.floor(Date.now() / 1000);
@@ -164,15 +156,7 @@ export default {
                 });
             } else if (url.includes("/anime/")) {
                 const headers = request.headers;
-                let referer = String(headers.get("Referer"));
-                if (referer == 'null') {
-                    referer = String(headers.get("referer"));
-                }
-                if (referer == 'null') {
-                    referer = 'direct'
-                }
-
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 let anime = url.split("/anime/")[1];
 
@@ -227,11 +211,7 @@ export default {
                 });
             } else if (url.includes("/episode/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 const id = url.split("/episode/")[1];
                 const data = await getEpisode(id);
@@ -242,11 +222,7 @@ export default {
                 });
             } else if (url.includes("/download/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 const query = url.split("/download/")[1];
                 const timeValue = CACHE["timeValue"];
@@ -279,11 +255,7 @@ export default {
                 });
             } else if (url.includes("/recent/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 const page = url.split("/recent/")[1];
 
@@ -315,11 +287,7 @@ export default {
                 });
             } else if (url.includes("/recommendations/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 let query = url.split("/recommendations/")[1];
 
@@ -349,11 +317,7 @@ export default {
                 });
             } else if (url.includes("/gogoPopular/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 let page = url.split("/gogoPopular/")[1];
 
@@ -380,11 +344,7 @@ export default {
                 });
             } else if (url.includes("/upcoming/")) {
                 const headers = request.headers;
-                let referer = headers.get("Referer");
-                if (referer === null) {
-                    referer = headers.get("referer");
-                }
-                await increaseViews(referer);
+                await increaseViews(headers);
 
                 let page = url.split("/upcoming/")[1];
 

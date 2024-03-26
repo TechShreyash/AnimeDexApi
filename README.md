@@ -10,6 +10,10 @@ Documentation : https://api.anime-dex.workers.dev
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/TechShreyash/AnimeDexApi)
 
+### Deploy Tutorial
+
+https://github.com/TechShreyash/AnimeDexApi/assets/82265247/da97a941-4f46-42ec-beaf-3c7e1f31f0aa
+
 ## Deploy To Cloudflare (Hard Way)
 
 - Install Wrangler CLI : https://developers.cloudflare.com/workers/wrangler/install-and-update/
